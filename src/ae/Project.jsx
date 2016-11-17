@@ -1,4 +1,4 @@
-Project.prototype.forItems = cb => {
+Project.prototype.forItems = function (cb) {
   const numItems = this.numItems
   for (var i = 1; i <= numItems; i++) {
     const item = this.item(i)
@@ -6,7 +6,7 @@ Project.prototype.forItems = cb => {
   }
 }
 
-Project.prototype.forFilteredItems = (filter, cb) => {
+Project.prototype.forFilteredItems = function (filter, cb) {
   const numItems = this.numItems
   for (var i = 1; i < numItems; i++) {
     const item = this.item(i)
@@ -14,20 +14,20 @@ Project.prototype.forFilteredItems = (filter, cb) => {
   }
 }
 
-Project.prototype.forSelections = cb => {
+Project.prototype.forSelections = function (cb) {
   for (var i = 0; i < this.selection.length; i++) {
     cb(this.selection[i])
   }
 }
 
-Project.prototype.forCompositions = cb => {
+Project.prototype.forCompositions = function (cb) {
   this.forFilteredItems(
     item => item instanceof CompItem,
     cb
   )
 }
 
-Project.prototype.forCompositionsWithName = (name, cb) => {
+Project.prototype.forCompositionsWithName = function (name, cb) {
   this.forFilteredItems(
     item => item instanceof CompItem && item.name === name,
     cb

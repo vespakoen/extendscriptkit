@@ -33,7 +33,7 @@ function logError() {
   _log(args, 'ERROR');
 }
 
-console = {
+module.exports = {
   log: logConsole,
   error: logError
 };
