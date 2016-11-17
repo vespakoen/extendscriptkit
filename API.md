@@ -22,7 +22,7 @@ app.faster(() => {
 ```
 ## AE / Composition (JSX)
 
-Adds a couple of helper methods to `AE`'s `Composition` prototype.
+Adds a couple of helper methods to `AE`'s `CompItem` prototype.
 
 ### Use
 
