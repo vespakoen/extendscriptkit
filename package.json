@@ -1,6 +1,6 @@
 {
   "name": "extendscriptkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "ExtendScript shims and helpers",
   "main": "index.js",
   "devDependencies": {
@@ -9,12 +9,13 @@
     "babel-plugin-transform-es3-property-literals": "^6.8.0",
     "babel-plugin-transform-es5-property-mutators": "^6.8.0",
     "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
     "browserify": "^13.1.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf jsx && rm -rf js && cd src && babel . -x \".jsx\" --out-dir ../jsx && babel . -x \".js\" --out-dir ../js",
-    "build-docs": "find src -name '*.md' | xargs cat > API.md"
+    "build": "npm run build-standalone && rm -rf jsx && rm -rf js && cd src/jsx && babel . --out-dir ../../jsx && cd ../js && babel . --out-dir ../../js",
+    "build-standalone": "browserify -t babelify src/jsx/standalone.js > ExtendScriptKit.jsx"
   },
   "author": "Koen Schmeets",
   "license": "MIT"

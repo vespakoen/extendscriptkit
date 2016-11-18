@@ -1,3 +1,5 @@
+require('./Project')
+
 Application.prototype.undoable = function (name, cb) {
   app.beginUndoGroup(name)
   cb()
