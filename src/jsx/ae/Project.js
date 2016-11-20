@@ -1,24 +1,22 @@
 Project.prototype.forItems = function (cb) {
-  const numItems = this.numItems
-  for (var i = 1; i < numItems; i++) {
-    const item = this.item(i)
-    cb(item, i)
+  for (var i = this.numItems - 1; i > 0; i--) {
+    var item = this.item(i);
+    cb(item, i);
   }
-}
+};
 
 Project.prototype.forFilteredItems = function (filter, cb) {
-  const numItems = this.numItems
-  for (var i = 1; i < numItems; i++) {
-    const item = this.item(i)
-    filter(item) && cb(item, i)
+  for (var i = this.numItems - 1; i > 0; i--) {
+    var item = this.item(i);
+    filter(item) && cb(item, i);
   }
-}
+};
 
 Project.prototype.forSelections = function (cb) {
-  for (var i = 0; i < this.selection.length; i++) {
-    cb(this.selection[i], i)
+  for (var i = this.selection.length - 1; i >= 0; i--) {
+    cb(this.selection[i], i);
   }
-}
+};
 
 Project.prototype.forCompositions = function (cb) {
   this.forFilteredItems(
