@@ -2,7 +2,7 @@
 
 Project.prototype.forItems = function (cb) {
   var numItems = this.numItems;
-  for (var i = 1; i <= numItems; i++) {
+  for (var i = 1; i < numItems; i++) {
     var item = this.item(i);
     cb(item, i);
   }
@@ -10,7 +10,7 @@ Project.prototype.forItems = function (cb) {
 
 Project.prototype.forFilteredItems = function (filter, cb) {
   var numItems = this.numItems;
-  for (var i = 1; i <= numItems; i++) {
+  for (var i = 1; i < numItems; i++) {
     var item = this.item(i);
     filter(item) && cb(item, i);
   }
@@ -23,7 +23,7 @@ Project.prototype.forSelections = function (cb) {
 };
 
 Project.prototype.forCompositions = function (cb) {
-  this.forFilteredItems(function (item) {
+  this.forFilteredItems(item => {
     return item instanceof CompItem;
   }, cb);
 };
