@@ -33,6 +33,11 @@ function logError() {
   _log(args, 'ERROR');
 }
 
+$.global.console = {
+  log: logConsole,
+  error: logError
+}
+
 module.exports = {
   log: logConsole,
   error: logError

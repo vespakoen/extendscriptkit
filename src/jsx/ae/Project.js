@@ -2,21 +2,21 @@ Project.prototype.forItems = function (cb) {
   const numItems = this.numItems
   for (var i = 1; i <= numItems; i++) {
     const item = this.item(i)
-    cb(item)
+    cb(item, i)
   }
 }
 
 Project.prototype.forFilteredItems = function (filter, cb) {
   const numItems = this.numItems
-  for (var i = 1; i < numItems; i++) {
+  for (var i = 1; i <= numItems; i++) {
     const item = this.item(i)
-    filter(item) && cb(item)
+    filter(item) && cb(item, i)
   }
 }
 
 Project.prototype.forSelections = function (cb) {
   for (var i = 0; i < this.selection.length; i++) {
-    cb(this.selection[i])
+    cb(this.selection[i], i)
   }
 }
 
