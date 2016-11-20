@@ -1,6 +1,6 @@
 Project.prototype.forItems = function (cb) {
   const numItems = this.numItems
-  for (var i = 1; i <= numItems; i++) {
+  for (var i = 1; i < numItems; i++) {
     const item = this.item(i)
     cb(item, i)
   }
@@ -8,7 +8,7 @@ Project.prototype.forItems = function (cb) {
 
 Project.prototype.forFilteredItems = function (filter, cb) {
   const numItems = this.numItems
-  for (var i = 1; i <= numItems; i++) {
+  for (var i = 1; i < numItems; i++) {
     const item = this.item(i)
     filter(item) && cb(item, i)
   }

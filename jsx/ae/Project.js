@@ -23,7 +23,7 @@ Project.prototype.forSelections = function (cb) {
 };
 
 Project.prototype.forCompositions = function (cb) {
-  this.forFilteredItems(item => {
+  this.forFilteredItems(function (item) {
     return item instanceof CompItem;
   }, cb);
 };

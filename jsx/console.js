@@ -36,7 +36,7 @@ function logError() {
 $.global.console = {
   log: logConsole,
   error: logError
-}
+};
 
 module.exports = {
   log: logConsole,

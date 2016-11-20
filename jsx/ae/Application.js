@@ -17,3 +17,7 @@ Application.prototype.faster = function (cb) {
     return composition.remove();
   });
 };
+
+Application.prototype.activeItemIsComposition = function () {
+  return app.project && app.project.activeItem && app.project.activeItem instanceof CompItem;
+};
