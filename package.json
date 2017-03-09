@@ -1,6 +1,6 @@
 {
   "name": "extendscriptkit",
-  "version": "0.1.5",
+  "version": "0.1.7",
   "description": "ExtendScript shims and helpers",
   "main": "index.js",
   "devDependencies": {

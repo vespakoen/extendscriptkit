@@ -1,4 +1,29 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+"use strict";
+
+AVLayer.prototype.findPropertyGroup = function (name) {
+  // loop through layer property groups
+  for (var i = 0; i < this.numProperties; i++) {
+    var group = this.property(i + 1);
+    // find the target property group
+    if (group instanceof PropertyGroup && group.name == name) {
+      return group;
+    }
+  }
+  return null;
+};
+
+AVLayer.prototype.findProperty = function (propertyGroupName, propertyName) {
+  var propertyGroup, property;
+  if (propertyGroup = this.findPropertyGroup(propertyGroupName)) {
+    if (property = propertyGroup.findProperty(propertyName)) {
+      return property;
+    }
+  }
+  return null;
+};
+
+},{}],2:[function(require,module,exports){
 'use strict';
 
 require('./Project');
@@ -23,7 +48,7 @@ Application.prototype.activeItemIsComposition = function () {
   return app.project && app.project.activeItem && app.project.activeItem instanceof CompItem;
 };
 
-},{"./Project":3}],2:[function(require,module,exports){
+},{"./Project":4}],3:[function(require,module,exports){
 "use strict";
 
 CompItem.prototype.forLayers = function (cb) {
@@ -44,18 +69,51 @@ CompItem.prototype.forSelectedLayers = function (cb) {
   }
 };
 
-},{}],3:[function(require,module,exports){
+// find a specific layer by name
+CompItem.prototype.findLayer = function (name) {
+  // loop through all layers
+  for (var n = 0; n < this.numLayers; n++) {
+    var layer = this.layer(n + 1);
+    // find the target layer
+    if (layer instanceof AVLayer && layer.name == name) {
+      return layer;
+    }
+  }
+  return null;
+};
+
+CompItem.prototype.findPropertyGroup = function (layerName, propertyGroupName) {
+  var layer, propertyGroup;
+  if (layer = this.findLayer(layerName)) {
+    if (propertyGroup = layer.findPropertyGroup(propertyGroupName)) {
+      return propertyGroup;
+    }
+  }
+  return null;
+};
+
+CompItem.prototype.findProperty = function (layerName, propertyGroupName, propertyName) {
+  var propertyGroup, property;
+  if (propertyGroup = this.findPropertyGroup(layerName, propertyGroupName)) {
+    if (property = propertyGroup.findProperty(propertyName)) {
+      return property;
+    }
+  }
+  return null;
+};
+
+},{}],4:[function(require,module,exports){
 "use strict";
 
 Project.prototype.forItems = function (cb) {
-  for (var i = this.numItems - 1; i > 0; i--) {
+  for (var i = this.numItems; i > 0; i--) {
     var item = this.item(i);
     cb(item, i);
   }
 };
 
 Project.prototype.forFilteredItems = function (filter, cb) {
-  for (var i = this.numItems - 1; i > 0; i--) {
+  for (var i = this.numItems; i > 0; i--) {
     var item = this.item(i);
     filter(item) && cb(item, i);
   }
@@ -79,7 +137,64 @@ Project.prototype.forCompositionsWithName = function (name, cb) {
   }, cb);
 };
 
-},{}],4:[function(require,module,exports){
+// find a composition by name
+Project.prototype.findComposition = function (compositionName) {
+  // loop through all project items
+  for (var i = 0; i < this.numItems; i++) {
+    var composition = this.item(i + 1);
+    // find the composition
+    if (composition instanceof CompItem && composition.name === compositionName) {
+      return composition;
+    }
+  }
+  return null;
+};
+
+Project.prototype.findLayer = function (compositionName, layerName) {
+  var composition, layer;
+  if (composition = this.findComposition(compositionName)) {
+    if (layer = composition.findLayer(layerName)) {
+      return layer;
+    }
+  }
+  return null;
+};
+
+Project.prototype.findPropertyGroup = function (compositionName, layerName, propertyGroupName) {
+  var layer, propertyGroup;
+  if (layer = this.findLayer(compositionName, layerName)) {
+    if (propertyGroup = layer.findPropertyGroup(propertyGroupName)) {
+      return propertyGroup;
+    }
+  }
+  return null;
+};
+
+Project.prototype.findProperty = function (compositionName, layerName, propertyGroupName, propertyName) {
+  var propertyGroup, property;
+  if (propertyGroup = this.findPropertyGroup(compositionName, layerName, propertyGroupName)) {
+    if (property = propertyGroup.findProperty(propertyName)) {
+      return property;
+    }
+  }
+  return null;
+};
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+PropertyGroup.prototype.findProperty = function (name) {
+  // Loop through individual properties
+  for (var i = 0; i < this.numProperties; i++) {
+    // find the property
+    if (this.property(i + 1).name === name) {
+      return this.property(i + 1);
+    }
+  }
+  return null;
+};
+
+},{}],6:[function(require,module,exports){
 "use strict";
 
 var xLib;
@@ -102,7 +217,7 @@ function dispatch(type, data) {
 
 module.exports = dispatch;
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 var dispatch = require('./bridge');
@@ -148,21 +263,23 @@ module.exports = {
   error: logError
 };
 
-},{"./bridge":4}],6:[function(require,module,exports){
+},{"./bridge":6}],8:[function(require,module,exports){
 'use strict';
 
 var bridge = require('./bridge');
 var console = require('./console');
-var Application = require('./ae/Application');
-var Composition = require('./ae/Composition');
-var Project = require('./ae/Project');
+require('./ae/Application');
+require('./ae/Composition');
+require('./ae/Project');
+require('./ae/AVLayer');
+require('./ae/PropertyGroup');
 
 module.exports = {
   bridge: bridge,
   console: console
 };
 
-},{"./ae/Application":1,"./ae/Composition":2,"./ae/Project":3,"./bridge":4,"./console":5}],7:[function(require,module,exports){
+},{"./ae/AVLayer":1,"./ae/Application":2,"./ae/Composition":3,"./ae/Project":4,"./ae/PropertyGroup":5,"./bridge":6,"./console":7}],9:[function(require,module,exports){
 'use strict';
 
 var _require = require('./index'),
@@ -172,4 +289,4 @@ var _require = require('./index'),
 $.global.console = console;
 $.global.bridge = bridge;
 
-},{"./index":6}]},{},[7]);
+},{"./index":8}]},{},[9]);
